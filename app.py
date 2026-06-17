@@ -36,47 +36,52 @@ def calculate_ats_score(text, skills):
     text_lower = text.lower()
     score = 0
 
+    # Contact
     if "@" in text:
-        score += 5
-
-    if any(char.isdigit() for char in text):
-        score += 5
-
-    education_keywords = [
-        "education", "btech", "b.e", "degree", "college", "university"
-    ]
-    if any(word in text_lower for word in education_keywords):
-        score += 15
-
-    skill_score = min(len(skills) * 2, 20)
-    score += skill_score
-
-    project_keywords = [
-        "project", "projects", "developed", "implemented", "built"
-    ]
-    if any(word in text_lower for word in project_keywords):
-        score += 20
-
-    experience_keywords = [
-        "experience", "internship", "intern", "employment", "worked"
-    ]
-    if any(word in text_lower for word in experience_keywords):
-        score += 20
-
-    cert_keywords = [
-        "certification", "certificate", "aws", "azure",
-        "google cloud", "coursera", "udemy"
-    ]
-    if any(word in text_lower for word in cert_keywords):
         score += 10
 
-    sections = ["summary", "skills", "education", "project", "experience"]
-    structure_count = sum(1 for s in sections if s in text_lower)
-    score += min(structure_count, 5)
+    # Skills
+    score += min(len(set(skills)) * 2, 20)
 
-    return min(score, 100)
+    # Experience
+    if "experience" in text_lower or "internship" in text_lower:
+        score += 15
 
+    # Projects
+    if "project" in text_lower:
+        score += 15
 
+    # Certifications
+    if "certificate" in text_lower or "certification" in text_lower:
+        score += 10
+
+    # Education
+    if any(word in text_lower for word in [
+        "education", "btech", "degree", "university"
+    ]):
+        score += 10
+
+    # Resume length
+    words = len(text.split())
+
+    if words > 400:
+        score += 20
+    elif words > 250:
+        score += 10
+    else:
+        score += 0
+
+    # Hard penalties
+    if "experience" not in text_lower and "internship" not in text_lower:
+        score -= 20
+
+    if "certificate" not in text_lower and "certification" not in text_lower:
+        score -= 10
+
+    if len(skills) < 3:
+        score -= 15
+
+    return max(min(score, 100), 0)
 # =========================
 # JOB MATCHING ENGINE
 # =========================
