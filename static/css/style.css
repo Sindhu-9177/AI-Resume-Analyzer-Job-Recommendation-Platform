@@ -269,3 +269,33 @@ body {
         padding: 20px;
     }
 }
+/* =========================
+   ATS CHART
+========================= */
+
+#atsChart {
+    width: 220px !important;
+    height: 220px !important;
+    margin: 0 auto 15px auto;
+}
+
+/* =========================
+   ATS LEVEL
+========================= */
+
+#atsLevel {
+    font-size: 18px;
+    font-weight: 700;
+    text-align: center;
+    color: #10B981;
+    margin-top: 10px;
+}
+
+/* =========================
+   SKILLS CHART
+========================= */
+
+#skillsChart {
+    margin-top: 20px;
+    max-height: 300px;
+}

@@ -1,3 +1,5 @@
+let atsChart = null;
+let skillsChart = null;
 async function analyzeResume() {
 
     const fileInput = document.getElementById("resumeFile");
@@ -8,6 +10,7 @@ async function analyzeResume() {
 
     // Reset UI
     document.getElementById("atsScore").innerText = "--";
+    document.getElementById("atsLevel").innerText = "";
     document.getElementById("skillsContainer").innerHTML = "";
     document.getElementById("jobsContainer").innerHTML = "";
 
@@ -44,7 +47,43 @@ async function analyzeResume() {
         // =====================
         // ATS SCORE
         // =====================
-        document.getElementById("atsScore").innerText = data.ats_score || 0;
+        document.getElementById("atsScore").innerHTML =
+`${data.ats_score}%`;
+
+document.getElementById("atsLevel").innerHTML =
+data.ats_level;
+if (atsChart) {
+    atsChart.destroy();
+}
+
+const atsCtx =
+document.getElementById("atsChart");
+
+atsChart = new Chart(atsCtx, {
+    type: "doughnut",
+    data: {
+        datasets: [{
+            data: [
+                data.ats_score,
+                100 - data.ats_score
+            ],
+            backgroundColor: [
+                "#10B981",
+                "#334155"
+            ],
+            borderWidth: 0
+        }]
+    },
+    options: {
+        responsive: true,
+        cutout: "75%",
+        plugins: {
+            legend: {
+                display: false
+            }
+        }
+    }
+});
 
         // =====================
         // SKILLS
